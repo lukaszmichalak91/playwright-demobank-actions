@@ -20,3 +20,12 @@ jobs:
        run: npx playwright install --with-deps
      - name: Run Playwright tests
        run: npm run test
+     - name: Archive test result  
+       if: success() || failure()
+       uses: actions/upload-artifact@v4
+       with:
+         name: tests-reports
+         path: |
+           playwright-report/**/*.*
+           tests-results/**/*.*
+       
