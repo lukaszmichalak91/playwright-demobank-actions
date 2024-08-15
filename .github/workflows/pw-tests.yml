@@ -30,9 +30,17 @@ jobs:
        with: 
           path: |
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}   
+     - name: Cache node_modules
+       uses: actions/cache@v4.0.2
+       id: node-cache
+       with: 
+          path: |
+            node_modules
+          key: node_modules
      - name: Install dependencies
        run: npm ci
+       if: steps.node_cache.outputs.cache-hit != 'true'
      - name: Install Playwright Browsers
        if: steps.playwright-cache.outputs.cache-hit != 'true'
        run: npx playwright install --with-deps
